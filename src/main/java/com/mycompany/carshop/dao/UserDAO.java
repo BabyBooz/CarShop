@@ -16,7 +16,6 @@ public class UserDAO {
             if (rs.next()) {
                 User user = new User();
                 user.setUserId(rs.getInt("user_id"));
-                user.setRollNumber(rs.getString("roll_number"));
                 user.setFullName(rs.getString("full_name"));
                 user.setUsername(rs.getString("username"));
                 user.setEmail(rs.getString("email"));
@@ -32,16 +31,15 @@ public class UserDAO {
     }
     
     public boolean register(User user) {
-        String sql = "INSERT INTO users (roll_number, full_name, username, password, email, phone, address, role) VALUES (?, ?, ?, ?, ?, ?, ?, 'customer')";
+        String sql = "INSERT INTO users (full_name, username, password, email, phone, address, role) VALUES (?, ?, ?, ?, ?, ?, 'customer')";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, user.getRollNumber());
-            ps.setString(2, user.getFullName());
-            ps.setString(3, user.getUsername());
-            ps.setString(4, user.getPassword());
-            ps.setString(5, user.getEmail());
-            ps.setString(6, user.getPhone());
-            ps.setString(7, user.getAddress());
+            ps.setString(1, user.getFullName());
+            ps.setString(2, user.getUsername());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getEmail());
+            ps.setString(5, user.getPhone());
+            ps.setString(6, user.getAddress());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -58,7 +56,6 @@ public class UserDAO {
             if (rs.next()) {
                 User user = new User();
                 user.setUserId(rs.getInt("user_id"));
-                user.setRollNumber(rs.getString("roll_number"));
                 user.setFullName(rs.getString("full_name"));
                 user.setUsername(rs.getString("username"));
                 user.setEmail(rs.getString("email"));
@@ -74,7 +71,7 @@ public class UserDAO {
     }
     
     public boolean updateProfile(User user) {
-        String sql = "UPDATE users SET full_name = ?, email = ?, phone = ?, address = ?, password= ? WHERE user_id = ?";
+        String sql = "UPDATE users SET full_name = ?, email = ?, phone = ?, address = ?, password = ? WHERE user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFullName());

@@ -22,7 +22,6 @@ public class RegisterServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         User user = new User();
-        user.setRollNumber(request.getParameter("rollNumber"));
         user.setFullName(request.getParameter("fullName"));
         user.setUsername(request.getParameter("username"));
         user.setPassword(request.getParameter("password"));
@@ -32,9 +31,10 @@ public class RegisterServlet extends HttpServlet {
         
         UserDAO userDAO = new UserDAO();
         if (userDAO.register(user)) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            request.setAttribute("success", "Đăng ký thành công! Vui lòng đăng nhập.");
+            request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
         } else {
-            request.setAttribute("error", "Đăng ký thất bại");
+            request.setAttribute("error", "Đăng ký thất bại. Tên đăng nhập có thể đã tồn tại.");
             request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
         }
     }

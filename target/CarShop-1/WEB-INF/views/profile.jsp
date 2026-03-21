@@ -44,7 +44,11 @@
         <% if (request.getAttribute("error") != null) { %>
             <div class="error"><%= request.getAttribute("error") %></div>
         <% } %>
-        <form method="post">
+        <form method="post" accept-charset="UTF-8">
+            <div class="form-group">
+                <label>Tên đăng nhập</label>
+                <input type="text" value="${user.username}" disabled style="background: #f5f5f5;">
+            </div>
             <div class="form-group">
                 <label>Họ và tên</label>
                 <input type="text" name="fullName" value="${user.fullName}" required>
@@ -61,8 +65,11 @@
                 <label>Địa chỉ</label>
                 <input type="text" name="address" value="${user.address}" required>
             </div>
+            <div class="form-group">
+                <label>Mật khẩu mới</label>
+                <input type="password" name="newPassword">
+            </div>
             <button type="submit"><i class="fas fa-save"></i> Cập nhật</button>
-        </form>
     </div>
 </body>
 </html>

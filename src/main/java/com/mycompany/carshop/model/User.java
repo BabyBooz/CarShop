@@ -2,7 +2,6 @@ package com.mycompany.carshop.model;
 
 public class User {
     private int userId;
-    private String rollNumber;
     private String fullName;
     private String username;
     private String password;
@@ -13,10 +12,9 @@ public class User {
     
     public User() {}
     
-    public User(int userId, String rollNumber, String fullName, String username, 
+    public User(int userId, String fullName, String username, 
                 String email, String phone, String address, String role) {
         this.userId = userId;
-        this.rollNumber = rollNumber;
         this.fullName = fullName;
         this.username = username;
         this.email = email;
@@ -27,9 +25,6 @@ public class User {
     
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
-    
-    public String getRollNumber() { return rollNumber; }
-    public void setRollNumber(String rollNumber) { this.rollNumber = rollNumber; }
     
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }

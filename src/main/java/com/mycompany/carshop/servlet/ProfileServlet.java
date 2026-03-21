@@ -22,20 +22,37 @@ public class ProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        
         User currentUser = (User) request.getAttribute("currentUser");
         
-        currentUser.setFullName(request.getParameter("fullName"));
-        currentUser.setEmail(request.getParameter("email"));
-        currentUser.setPhone(request.getParameter("phone"));
-        currentUser.setAddress(request.getParameter("address"));
+        String fullName = request.getParameter("fullName");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String address = request.getParameter("address");
+        String newPassword = request.getParameter("newPassword");
+        
+        currentUser.setFullName(fullName);
+        currentUser.setEmail(email);
+        currentUser.setPhone(phone);
+        currentUser.setAddress(address);
+        
+        // Nếu nhập mật khẩu mới, cập nhật; nếu không thì giữ mật khẩu cũ
+        if (newPassword != null && !newPassword.isEmpty()) {
+            currentUser.setPassword(newPassword);
+        }
         
         UserDAO userDAO = new UserDAO();
-        if (userDAO.updateProfile(currentUser)) {
+        boolean updated = userDAO.updateProfile(currentUser);
+        
+        if (updated) {
             request.setAttribute("success", "Cập nhật thông tin thành công");
+            request.setAttribute("user", currentUser);
         } else {
             request.setAttribute("error", "Cập nhật thất bại");
+            request.setAttribute("user", currentUser);
         }
-        request.setAttribute("user", currentUser);
+        
         request.getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
     }
 }

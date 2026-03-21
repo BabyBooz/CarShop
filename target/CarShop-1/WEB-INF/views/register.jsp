@@ -22,18 +22,15 @@
 <body>
     <div class="container">
         <h2><i class="fas fa-user-plus"></i> Đăng ký tài khoản</h2>
+        <% if (request.getAttribute("success") != null) { %>
+            <div style="color: green; text-align: center; margin-bottom: 10px;">
+                <%= request.getAttribute("success") %>
+            </div>
+        <% } %>
         <% if (request.getAttribute("error") != null) { %>
             <div class="error"><%= request.getAttribute("error") %></div>
         <% } %>
-        <form method="post">
-            <div class="form-group">
-                <label>Mã số</label>
-                <input type="text" name="rollNumber" required>
-            </div>
-            <div class="form-group">
-                <label>Họ và tên</label>
-                <input type="text" name="fullName" required>
-            </div>
+        <form method="post" accept-charset="UTF-8">
             <div class="form-group">
                 <label>Tên đăng nhập</label>
                 <input type="text" name="username" required>
@@ -41,6 +38,10 @@
             <div class="form-group">
                 <label>Mật khẩu</label>
                 <input type="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label>Họ và tên</label>
+                <input type="text" name="fullName" required>
             </div>
             <div class="form-group">
                 <label>Email</label>
