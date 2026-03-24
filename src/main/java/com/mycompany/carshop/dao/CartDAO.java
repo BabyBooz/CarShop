@@ -9,6 +9,7 @@ import java.util.List;
 public class CartDAO {
     
     public int getOrCreateCart(int userId) {
+        // GET CART
         String checkSql = "SELECT cart_id FROM cart WHERE user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(checkSql)) {
@@ -21,6 +22,7 @@ public class CartDAO {
             e.printStackTrace();
         }
         
+        // CREATE CARD
         String insertSql = "INSERT INTO cart (user_id) VALUES (?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {

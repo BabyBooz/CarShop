@@ -1,3 +1,28 @@
+<%-- 
+    admin/orders.jsp - Trang quản lý đơn hàng cho admin
+    
+    Chức năng:
+    - Hiển thị danh sách tất cả đơn hàng từ tất cả khách hàng
+    - Hiển thị chi tiết từng đơn hàng (sản phẩm, số lượng, giá)
+    - Cho phép admin cập nhật trạng thái đơn hàng (chờ xử lý, đang xử lý, hoàn thành)
+    - Hiển thị tổng tiền cho mỗi đơn hàng
+    
+    Luồng:
+    1. Admin truy cập /admin/orders?userId=X
+    2. AdminOrderServlet lấy tất cả đơn hàng từ database
+    3. JSP hiển thị danh sách đơn hàng
+    4. Admin chọn trạng thái mới, submit form (POST)
+    5. AdminOrderServlet cập nhật trạng thái, redirect về trang danh sách
+    
+    Dữ liệu từ request:
+    - ${orders}: List<Order> chứa tất cả đơn hàng
+    - ${order.items}: List<OrderItem> chứa chi tiết sản phẩm trong đơn hàng
+    - ${param.userId}: ID admin từ URL
+    
+    JSTL Tags:
+    - <c:forEach>: Lặp qua danh sách đơn hàng
+    - <fmt:formatNumber>: Định dạng số tiền
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
@@ -29,39 +54,68 @@
     </style>
 </head>
 <body>
+    <!-- Header - Thanh điều hướng admin -->
     <div class="header">
         <div class="header-content">
+            <!-- Logo và tên ứng dụng -->
             <h1><i class="fas fa-car"></i> Admin - Car Shop</h1>
+            
+            <!-- Menu điều hướng admin -->
             <div class="nav">
+                <!-- Link quản lý xe -->
                 <a href="cars?userId=${param.userId}"><i class="fas fa-car"></i> Quản lý xe</a>
+                
+                <!-- Link quản lý đơn hàng (trang hiện tại) -->
                 <a href="orders?userId=${param.userId}"><i class="fas fa-box"></i> Đơn hàng</a>
+                
+                <!-- Link đăng xuất -->
                 <a href="${pageContext.request.contextPath}/login"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
             </div>
         </div>
     </div>
     
+    <!-- Container chính - Danh sách đơn hàng -->
     <div class="container">
+        <!-- Tiêu đề trang -->
         <h2 style="margin-bottom: 20px;"><i class="fas fa-box"></i> Quản lý đơn hàng</h2>
+        
+        <!-- Lặp qua từng đơn hàng -->
         <c:forEach var="order" items="${orders}">
+            <!-- Card cho mỗi đơn hàng -->
             <div class="order-card">
+                <!-- Header của đơn hàng: ID, khách hàng, ngày đặt, form cập nhật trạng thái -->
                 <div class="order-header">
                     <div>
+                        <!-- ID đơn hàng -->
                         <strong>Đơn hàng #${order.orderId}</strong><br>
+                        <!-- ID khách hàng -->
                         <small>Khách hàng ID: ${order.userId}</small><br>
+                        <!-- Ngày đặt hàng -->
                         <small>Ngày đặt: ${order.createdAt}</small>
                     </div>
                     <div>
+                        <!-- Form cập nhật trạng thái đơn hàng -->
                         <form action="orders?userId=${param.userId}" method="post" style="display: flex; gap: 10px; align-items: center;">
+                            <!-- Hidden input: ID đơn hàng -->
                             <input type="hidden" name="orderId" value="${order.orderId}">
+                            
+                            <!-- Dropdown chọn trạng thái mới -->
                             <select name="status">
+                                <!-- Chờ xử lý -->
                                 <option value="wait" ${order.status == 'wait' ? 'selected' : ''}>Chờ xử lý</option>
+                                <!-- Đang xử lý -->
                                 <option value="process" ${order.status == 'process' ? 'selected' : ''}>Đang xử lý</option>
+                                <!-- Hoàn thành -->
                                 <option value="done" ${order.status == 'done' ? 'selected' : ''}>Hoàn thành</option>
                             </select>
+                            
+                            <!-- Nút submit để cập nhật trạng thái -->
                             <button type="submit" class="btn"><i class="fas fa-save"></i> Cập nhật</button>
                         </form>
                     </div>
                 </div>
+                
+                <!-- Bảng chi tiết sản phẩm trong đơn hàng -->
                 <table>
                     <thead>
                         <tr>
@@ -72,16 +126,23 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- Lặp qua từng sản phẩm trong đơn hàng -->
                         <c:forEach var="item" items="${order.items}">
                             <tr>
+                                <!-- Tên sản phẩm -->
                                 <td>${item.carTitle}</td>
+                                <!-- Số lượng mua -->
                                 <td>${item.quantity}</td>
+                                <!-- Giá đơn vị (định dạng số tiền) -->
                                 <td><fmt:formatNumber value="${item.price}" pattern="#,###"/> VNĐ</td>
+                                <!-- Tổng tiền (số lượng x giá) -->
                                 <td><fmt:formatNumber value="${item.totalPrice}" pattern="#,###"/> VNĐ</td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
+                
+                <!-- Tổng cộng của đơn hàng -->
                 <div style="text-align: right; margin-top: 10px; font-size: 18px; font-weight: bold;">
                     Tổng cộng: <fmt:formatNumber value="${order.totalPrice}" pattern="#,###"/> VNĐ
                 </div>

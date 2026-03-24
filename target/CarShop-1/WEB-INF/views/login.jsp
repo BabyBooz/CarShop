@@ -1,3 +1,21 @@
+<%-- 
+    login.jsp - Trang đăng nhập
+    
+    Chức năng:
+    - Hiển thị form đăng nhập (tên đăng nhập, mật khẩu)
+    - Hiển thị thông báo lỗi nếu đăng nhập thất bại
+    - Link đến trang đăng ký cho người dùng mới
+    
+    Luồng:
+    1. Người dùng truy cập /login (GET)
+    2. LoginServlet hiển thị form trống
+    3. Người dùng nhập username, password, submit (POST)
+    4. LoginServlet kiểm tra database, nếu đúng redirect đến /home?userId=X
+    5. Nếu sai, gửi lại form với thông báo lỗi
+    
+    Dữ liệu từ request:
+    - request.getAttribute("error"): Thông báo lỗi đăng nhập
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -20,22 +38,35 @@
     </style>
 </head>
 <body>
+    <!-- Container chính - Form đăng nhập -->
     <div class="container">
+        <!-- Tiêu đề trang -->
         <h2><i class="fas fa-car"></i> Đăng nhập</h2>
+        
+        <!-- Hiển thị thông báo lỗi nếu đăng nhập thất bại -->
         <% if (request.getAttribute("error") != null) { %>
             <div class="error"><%= request.getAttribute("error") %></div>
         <% } %>
+        
+        <!-- Form POST để đăng nhập -->
         <form method="post">
+            <!-- Nhập tên đăng nhập -->
             <div class="form-group">
                 <label>Tên đăng nhập</label>
                 <input type="text" name="username" required>
             </div>
+            
+            <!-- Nhập mật khẩu -->
             <div class="form-group">
                 <label>Mật khẩu</label>
                 <input type="password" name="password" required>
             </div>
+            
+            <!-- Nút submit để đăng nhập -->
             <button type="submit"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
         </form>
+        
+        <!-- Link đến trang đăng ký cho người dùng mới -->
         <div class="link">
             Chưa có tài khoản? <a href="register">Đăng ký ngay</a>
         </div>
