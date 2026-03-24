@@ -112,17 +112,13 @@
                         <small>Ngày đặt: ${order.createdAt}</small>
                     </div>
                     <div>
-                        <!-- Hiển thị trạng thái với màu khác nhau -->
                         <c:choose>
-                            <!-- Trạng thái: Chờ xử lý (vàng) -->
                             <c:when test="${order.status == 'wait'}">
                                 <span class="status status-wait">Chờ xử lý</span>
                             </c:when>
-                            <!-- Trạng thái: Đang xử lý (xanh dương) -->
                             <c:when test="${order.status == 'process'}">
                                 <span class="status status-process">Đang xử lý</span>
                             </c:when>
-                            <!-- Trạng thái: Hoàn thành (xanh lá) -->
                             <c:otherwise>
                                 <span class="status status-done">Hoàn thành</span>
                             </c:otherwise>
